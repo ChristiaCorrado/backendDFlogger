@@ -1,0 +1,21 @@
+
+
+<div class="container mb-4 mb-lg-5">
+    <h3 style="color: blue">Centro de Mensajes</h3>
+        <form onsubmit="return addMessage(this)">
+            <input class="form-control" type="email" id="username" placeholder="Ingresar Email" >
+            <input class="form-control" type="text" id="nombre" placeholder="Ingresar Nombre" >
+            <input class="form-control" type="text" id="apellido" placeholder="Ingresar Apellido" >
+            <input class="form-control" type="text" id="edad" placeholder="Ingresar Edad" >
+            <input class="form-control" type="text" id="alias" placeholder="Ingresar Alias" >
+            <input class="form-control" type="text" id="avatar" placeholder="Ingresar url AVATAR" >
+            
+            <div class="d-flex">
+                <input class="form-control" type="text" id="texto" placeholder="Cuéntanos algo...">
+                <input class="btn btn-success" type="submit" value="Enviar">
+                
+            </div>
+        </form>
+        <div id="messages"></div>
+
+</div>

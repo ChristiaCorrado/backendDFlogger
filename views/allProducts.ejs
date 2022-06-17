@@ -1,0 +1,24 @@
+
+<%- include('./partials/encabezado.ejs'); %>
+
+    <h2 style="color: crimson">Vista de productos</h2>
+    <% if(allArticles.length !== 0) { %>
+
+    <%- include('./partials/tablaProductos.ejs', {allArticles}) %>
+
+    <% } else{ %>
+
+    <div>cargando</div>
+
+    <% };%> 
+
+    
+    <div>
+      <%- include('./partials/chat.ejs')  %> 
+    </div>
+    
+  </div>
+</div>
+
+
+<%- include('./partials/pie.ejs'); %>
