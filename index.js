@@ -1,10 +1,12 @@
 
+//const nodemailer = require('./src/lib/nodemailer')
 
 const cluster = require('cluster')
 const os = require('os')
-
+const dotenv = require('dotenv')
 const MODO = process.argv[2] || 'FORK'
 
+dotenv.config()
 
 if (MODO === 'CLUSTER' && cluster.isMaster) {
 
@@ -27,6 +29,7 @@ if (MODO === 'CLUSTER' && cluster.isMaster) {
     );
   })
 }else{
+
   const express = require("express");
 
   const { urlencoded } = require("express")
@@ -44,14 +47,15 @@ if (MODO === 'CLUSTER' && cluster.isMaster) {
   app.use('/', rootSession)
   app.use('/', randomNumero)
 
+  
+  app.set("view engine", "ejs");
+  
+  app.use(express.static("./public"));
+
   app.listen(app.get('port'), () => {
     console.info(`'listening on port' ${app.get('port')},  'PID' ${process.pid}`)
   })
 
-  app.set("view engine", "ejs");
-
-
-  app.use(express.static("./public"));
 
 }
 

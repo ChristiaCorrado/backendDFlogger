@@ -1,13 +1,15 @@
+const dotenv = require('dotenv')
 const mongoose = require("mongoose");
 const productSchema = require("../../dataBase/mongo/schemaProductMDB");
+
+dotenv.config()
 
 class ContenedorMongoDB {
   constructor() {}
 
   async connectMongoose() {
     try {
-      const URL =
-        "mongodb+srv://admin:1234@cluster0.d5rwo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+      const URL = process.env.URL_MONGO
       let rta = mongoose.connect(URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,

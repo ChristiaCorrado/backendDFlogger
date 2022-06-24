@@ -1,13 +1,15 @@
 const mongoose = require("mongoose");
-const userSchema = require("../../dataBase/mongo/schemaUsersMongo");
+const User = require("../../dataBase/mongo/schemaUsersMongo");
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 class ContenedorUsersMongoDB {
   constructor() {}
 
   async connectMongoose() {
     try {
-      const URL =
-        "mongodb+srv://admin:1234@cluster0.d5rwo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+      const URL = process.env.URL_MONGO;
       let rta = mongoose.connect(URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -24,7 +26,7 @@ class ContenedorUsersMongoDB {
     try {
       await this.connectMongoose();
 
-      let allUsers = await userSchema.find({});
+      let allUsers = await User.find({});
       
       return allUsers;
     } catch (error) {
@@ -37,34 +39,44 @@ class ContenedorUsersMongoDB {
       console.log(newUser);
       await this.connectMongoose();
 
-      await userSchema.create(newUser);
+      const userReg = new User()
+      userReg.username = newUser.username
+      userReg.password = userReg.encryptPassword(newUser.password) 
+      userReg.email = userReg.encryptPassword(newUser.email)
+
+      return await userReg.save()
+      
+       
+      
     
     } catch (error) {
       console.log(`saveNewUser ${error.message}`);
     }
   } 
 
-  async findUser(username,password) {
+  async findUser(username, password) {
     try {
       await this.connectMongoose();
-      const result = await userSchema.find({username:username,password:password});
+      
+      const resultUser = await User.findOne({username:username});
 
-      if (result.length==0) {
+      if (!resultUser) {
         return null
-      }else{
-
-        return result;
       }
+      if(!resultUser.decryptPassword(password)){
+        return resultUser
+      }
+      
       
     } catch (error) {
       return console.log("Error al obtener el usuario " + error.message);
     }
   }
 
-  async findOne(username) {
+  async findOne(id) {
     try {
       await this.connectMongoose();
-      const result = await userSchema.find({username:username});
+      const result = await User.findById(id);
 
       if (result.length==0) {
         return null

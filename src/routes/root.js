@@ -2,6 +2,7 @@
 const express = require("express");
 const root = express.Router();
 const {isAuthenticated} = require("../middleware/auth")
+const dotenv = require('dotenv')
 
 //web tokens
 const jwt = require("jsonwebtoken");
@@ -19,11 +20,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const userDao = require("../DAOs/users/usersDao");
 const users = new userDao;
 
-// const usuarios = [
-//   { username: 'admin', password: '1234', admin : true },
-//   { username: 'jose', password: '1234'  }
-// ]
-
+dotenv.config()
 
 //<<<<<<<<<<<< MONGO >>>>>>>>>>>>
 const connectMongo = require("connect-mongo");
@@ -37,8 +34,7 @@ root.use(cookieParser())
 root.use(
   session({
     store: connectMongo.create({
-      mongoUrl:
-        "mongodb+srv://admin:1234@cluster0.d5rwo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+      mongoUrl: process.env.URL_MONGO,
       mongoOptions: advancedOptions,
     }),
     secret: 'SECRETO',
@@ -48,7 +44,7 @@ root.use(
       maxAge: 2000, //20 seg
     },
   })
-);
+);  
 
 root.use(passport.initialize())
 root.use(passport.session())
@@ -70,9 +66,9 @@ passport.use(
       if (existe) {
         return done(null, false)
       } else {
-        await users.saveNewUser(req.body)
+        const userOk = await users.saveNewUser(req.body)
         
-        done(null, { username: username })
+        done(null, userOk )
       }
     }
   )
@@ -81,14 +77,14 @@ passport.use(
 passport.use(
   'login',
   new LocalStrategy(async (username, password, done) => {
-   
+    console.log(username);
     const existe = await users.findUser(username, password)
     
 
     if (!existe) {
       return done(null, false)
     } else {
-      
+    
       
       return done(null, {username: username})
     }
@@ -96,17 +92,17 @@ passport.use(
   })
 )
 
-passport.serializeUser((usuario, done) => {
+passport.serializeUser((user, done) => {
   
-  console.log(usuario.username + 'serializado')
-  done(null, usuario.username)
+  console.log(user.id + 'serializado')
+
+  done(null, user.id)
 })
 
-passport.deserializeUser(async (usuario, done) => {
+passport.deserializeUser(async (id, done) => {
   
-  const usuarioDzFinded = await users.findOne(usuario)
+  const usuarioDzFinded = await users.findOne(id)
 
-  
 
   console.log(JSON.stringify(usuarioDzFinded) + ' desserializado')
   done(null, usuarioDzFinded)

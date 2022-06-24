@@ -2,33 +2,11 @@
 const express = require("express");
 const calculo = express.Router();
 const log4js = require("log4js");
+const logger = require("../lib/utils")
 
-const ENT = "PROD";
 
-if (ENT === "PROD") {
-  log4js.configure({
-    appenders: {
-      miLoggerFile: { type: "file", filename: "debug.log" },
-      miErrorFile: { type: "file", filename: "errores.log" },
-    },
-    categories: {
-      default: { appenders: ["miLoggerFile"], level: "all" },
-      logwn: { appenders: ["miErrorFile"], level: "warn" },
-      logInfo: { appenders: ["miLoggerFile"], level: "info" },
-    },
-  });
-} else {
-  log4js.configure({
-    appenders: {
-      miLoggerConsole: { type: "console" },
-    },
-    categories: {
-      default: { appenders: ["miLoggerConsole"], level: "all" },
-      logwn: { appenders: ["miLoggerConsole"], level: "warn" },
-      logInfo: { appenders: ["miLoggerConsole"], level: "info" },
-    },
-  });
-}
+
+logger.logjsConfig(process.env.ENT)
 
 const logWarning = log4js.getLogger("logwn");
 const logInfo = log4js.getLogger("logInfo");
@@ -37,8 +15,6 @@ const logInfo = log4js.getLogger("logInfo");
 const os = require("os");
 const numCPUs = os.cpus().length;
 
-//fork
-//const { fork } = require("child_process");
 
 //const compression = require('compression')
 
@@ -75,7 +51,7 @@ calculo.get("/infoCompress", (_req, res) => {
   res.send(`<h1>${JSON.stringify(processInfo, null, 2)}</h1>`);
 });
 
-//const randomNumbersFork = fork("./src/randomNumber/randomN.js");
+
 
 calculo.get("/randoms", (req, res) => {
   const cantidad = 5000;
