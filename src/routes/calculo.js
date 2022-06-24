@@ -54,7 +54,7 @@ calculo.get("/infoCompress", (_req, res) => {
 
 
 calculo.get("/randoms", (req, res) => {
-  const cantidad = 5000;
+  const cantidad = 4000;
 
   randomNumbersFork.send(cantidad);
 
