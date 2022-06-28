@@ -1,0 +1,21 @@
+<%- include('./partials/encabezado.ejs'); %>
+
+  
+    <% if(producto.length !== 0) { %>
+
+    <%- include('./partials/product.ejs', producto) %>
+
+    <% } else{ %>
+
+    <div>cargando</div>
+
+    <% };%> 
+
+    
+    
+    
+  </div>
+</div>
+
+
+<%- include('./partials/pie.ejs'); %>

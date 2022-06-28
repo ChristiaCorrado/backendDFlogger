@@ -1,35 +1,83 @@
-<div class="wrap-login100 p-t-30 p-b-50">
-  <span class="login100-form-title p-b-41"> Account Login </span>
-  <form action="register" method="post" class=" pb-3 pt-5">
-    <div class="form-group m-1" data-validate="Enter username">
+<div class="wrap-login100 p-t-30 p-b-50 mt-5">
+  <span class="login100-form-title p-b-41"> </span>
+  <form action="register" method="post" class="row g-3">
+    <div class="col-md-4">
+      <label for="validationDefault01" class="form-label">First name</label>
       <input
-        class="form-control"
         type="text"
-        name="username"
-        placeholder="User name"
-      />
-      <span class="focus-input100" data-placeholder=""></span>
-    </div>
-    <div class="m-1" data-validate="Enter password">
-      <input
         class="form-control"
-        type="password"
-        name="password"
-        placeholder="Password"
+        id="validationDefault01"
+        name="name"
+        placeholder="Mark"
+        required
       />
-      <span class="focus-input100" data-placeholder=""></span>
     </div>
-    <div class="m-1" data-validate="Enter password">
+    <div class="col-md-4">
+      <label for="validationDefault02" class="form-label">Last name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="validationDefault02"
+        name="lastName"
+        placeholder="Otto"
+        required
+      />
+    </div>
+    <div class="col-md-4">
+      <label for="validationDefaultUsername" class="form-label">Username</label>
+      <div class="input-group">
+        
         <input
+          type="text"
           class="form-control"
-          type="email"
-          name="email"
-          placeholder="Email"
+          id="validationDefaultUsername"
+          name="username"
+          aria-describedby="inputGroupPrepend2"
+          placeholder=""
+          required
         />
-        <span class="focus-input100" data-placeholder=""></span>
       </div>
-    <div class=" m-1">
-      <button class="btn btn-success container-fluid" type="submit">Register</button>
+    </div>
+    <div class="col-md-12">
+      <label for="validationDefault03" class="form-label">Email</label>
+      <input type="text" class="form-control" name="email" id="validationDefault03" placeholder="Email" required>
+    </div>
+
+    <div class="col-md-6">
+      <label for="validationDefault03" class="form-label">City</label>
+      <input
+        type="text"
+        class="form-control"
+        name="city"
+        id="validationDefault03"
+        required
+      />
+    </div>
+
+    <div class="col-md-6 mb-5">
+      <label for="validationDefault05" class="form-label">Zip</label>
+      <input
+        type="text"
+        class="form-control"
+        id="validationDefault05"
+        name="zip"
+        required
+      />
+    </div>
+    <div class="col-md-6 mb-5">
+      <label for="validationDefault05" class="form-label">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="validationDefault05"
+        name="password"
+        required
+      />
+    </div>
+    
+    </div>
+    <div class="col-12 mb-5">
+      <button class="btn btn-primary" type="submit">Submit</button>
     </div>
   </form>
 </div>

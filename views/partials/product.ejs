@@ -1,0 +1,26 @@
+<% if(producto.length !== 0) { %>
+
+<div class="height container-fluid d-flex justify-content-center align-items-center p-5">
+  <% for (const article in producto ) { %>
+  <div class="card p-3 container">
+    <div class="d-flex flex-column justify-content-between align-items-center">
+      <div class="mt-2">
+        <h4 class="text-uppercase"><%= producto[article].title %></h4>
+        
+      </div>
+      <div class="image">
+        <img src="<%= producto[article].thumbnail %>" width="500" />
+      </div>
+    </div>
+
+    
+
+    <p><%= producto[article].description %></p>
+
+    <button class="btn btn-danger">Add to cart</button>
+    
+  </div>
+  <% } %> <% } else{ %>
+  <h3 style="color: black">no existen datos</h3>
+  <% };%>
+</div>

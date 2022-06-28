@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const User = require("../../dataBase/mongo/schemaUsersMongo");
+const bcrypt = require('bcrypt-nodejs')
 const dotenv = require('dotenv')
+
 
 dotenv.config()
 
@@ -40,10 +42,14 @@ class ContenedorUsersMongoDB {
       await this.connectMongoose();
 
       const userReg = new User()
+      userReg.name = newUser.name
+      userReg.lastName = newUser.lastName
+      userReg.city = newUser.city
       userReg.username = newUser.username
       userReg.password = userReg.encryptPassword(newUser.password) 
-      userReg.email = userReg.encryptPassword(newUser.email)
-
+      userReg.email = newUser.email
+      userReg.zip = newUser.zip
+      
       return await userReg.save()
       
        
@@ -59,17 +65,19 @@ class ContenedorUsersMongoDB {
       await this.connectMongoose();
       
       const resultUser = await User.findOne({username:username});
+      
+      console.log(resultUser);
+      
+      const test = bcrypt.compareSync(password, resultUser.password )
+      console.log(test);
 
-      if (!resultUser) {
+      if(!resultUser){
         return null
       }
-      if(!resultUser.decryptPassword(password)){
-        return resultUser
-      }
-      
+      return resultUser
       
     } catch (error) {
-      return console.log("Error al obtener el usuario " + error.message);
+      return console.log("Error al obtener el usuario finduser " + error.message);
     }
   }
 
@@ -90,6 +98,8 @@ class ContenedorUsersMongoDB {
     }
   }
 
+  
 }
+
 
 module.exports = ContenedorUsersMongoDB

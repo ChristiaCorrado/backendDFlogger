@@ -1,7 +1,7 @@
 //express import
 const express = require("express");
 const root = express.Router();
-const {isAuthenticated} = require("../middleware/auth")
+const {isAuthenticated , userAuth} = require("../middleware/auth")
 const dotenv = require('dotenv')
 
 //web tokens
@@ -24,6 +24,7 @@ dotenv.config()
 
 //<<<<<<<<<<<< MONGO >>>>>>>>>>>>
 const connectMongo = require("connect-mongo");
+const { RoomRecordingContext } = require("twilio/lib/rest/video/v1/room/recording");
 
 const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
@@ -79,14 +80,14 @@ passport.use(
   new LocalStrategy(async (username, password, done) => {
     console.log(username);
     const existe = await users.findUser(username, password)
-    
+    console.log(existe);
 
     if (!existe) {
       return done(null, false)
     } else {
     
       
-      return done(null, {username: username})
+      return done(null, existe)
     }
     
   })
@@ -128,13 +129,30 @@ root.get("/login", (req, res) => {
 });
 
 root.post('/login', passport.authenticate('login', {
+  
   successRedirect: '/api/admin',
   failureRedirect: '/login-error',
 }))
 
+root.get('/login-error', (req, res) => {
+  res.render("login-error")
+
+})
+
+//ADMIN
 
 root.get("/api/admin", isAuthenticated, (req, res) => {
   res.render("admin")
+  
+})
+
+//PROFILE
+
+root.get(`/api/profile/:user`,userAuth, async (req, res)=>{
+
+  const user = [await users.findOne(req.params.user)]
+  
+  res.render("profile", {user})
   
 })
 

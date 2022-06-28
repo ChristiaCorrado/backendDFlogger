@@ -7,9 +7,6 @@ const express = require("express");
 const routerProductos = express.Router();
 
 
-
-
-
 routerProductos.get("/", async (req, res) => {
   
   allArticles = await product.getAll()
@@ -42,9 +39,9 @@ routerProductos.delete("/:id", async (req, res) => {
 });
 
 routerProductos.get("/:id", async (req, res) => {
-  const id = parseInt(req.params.id);
-  const filter = await product.getProductById(id) ;
-  res.json(filter);
+ 
+  const producto = [await product.getProductById(req.params.id)] ;
+  res.render('producto', {producto})
 })
 
 
