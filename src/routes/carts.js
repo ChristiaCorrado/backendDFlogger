@@ -1,18 +1,38 @@
 //container import
 const cartDao = require("../DAOs/cart/cartDaoFirebase");
-const cartC = new cartDao
+const userDao = require("../DAOs/users/usersDao")
 
+const cartC = new cartDao
+const cartUser = new userDao
 
 
 //express import
 const express = require("express");
 const routerCarrito = express.Router();
 
-routerCarrito.post("/",async (req, res) => {
-  console.log(req.body);
-  const productInCart = req.body;
-  const cart = await cartC.saveCart(productInCart);
-  res.json(cart);
+routerCarrito.post("/",async (req, res, next) => {
+
+  const userId = req.session.passport
+  console.log(userId);
+ 
+  const noIdCart = await cartUser.findOne(userId.user)
+
+  let userCart 
+
+  if(noIdCart.cartId === 'none'){
+    
+    const cart = await cartC.saveCart({});
+    userCart = await cartUser.addIdCart( {_id : userId.user},cart)
+    
+  } else {
+    userCart = noIdCart.cartId
+    
+  }
+  
+
+    res.redirect(`cart/${userCart}/productos`);
+
+
 });
 
 routerCarrito.delete("/:id", async (req, res) => {
@@ -23,15 +43,37 @@ routerCarrito.delete("/:id", async (req, res) => {
 
 routerCarrito.get("/:id/productos", async (req, res) => {
   const id = req.params.id;
-  const cart = await cartC.getCartById(id);
-  res.json(cart);
+  const userCart = await cartC.getCartById(id);
+  console.log(userCart);
+  res.render(`cart`,{userCart});
 });
 
 routerCarrito.post("/:id/productos", async (req, res) => {
-  const id = req.params.id;
-  const products = req.body;
-  const cartActualizado = await cartC.addProductToCartById(id, products);
-  res.json(cartActualizado);
+  const idProducto = req.params.id;
+
+  const userId = req.session.passport
+  console.log(userId);
+  
+
+  const noIdCart = await cartUser.findOne(userId.user)
+
+  let userCart 
+
+  if(noIdCart.cartId === 'none'){
+    
+    const cart = await cartC.saveCart({});
+    userCart = await cartUser.addIdCart( {_id : userId.user},cart)
+    
+  } else {
+    userCart = noIdCart.cartId
+    console.log(userCart);
+    const cartActualizado = await cartC.addProductToCartById(userCart, {_id:idProducto});
+    console.log(cartActualizado);
+
+  }
+
+
+  res.redirect(`/api/cart/${userCart}/productos`);
 });
 
 routerCarrito.delete("/:id/productos/:productId", async (req, res) => {
@@ -41,7 +83,7 @@ routerCarrito.delete("/:id/productos/:productId", async (req, res) => {
   console.log(id);
   console.log(productId);
   const cart = await cartC.deleteProductCartById(id, productId);
-  res.json(cart);
+  
 });
 
 routerCarrito.get("/", async (req, res) => {

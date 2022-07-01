@@ -1,54 +1,34 @@
 //express import
 const express = require("express");
 const root = express.Router();
+
+
+
 const {isAuthenticated , userAuth} = require("../middleware/auth")
 const dotenv = require('dotenv')
 
 //web tokens
-const jwt = require("jsonwebtoken");
 const PRIVATE_KEY = 'miClavePrivada'
 
 //cookie + session + passport
 const cookieParser = require("cookie-parser");
-const session = require('express-session');
+
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
-
-//persistencia
 
 const userDao = require("../DAOs/users/usersDao");
 const users = new userDao;
 
 dotenv.config()
 
-//<<<<<<<<<<<< MONGO >>>>>>>>>>>>
-const connectMongo = require("connect-mongo");
-const { RoomRecordingContext } = require("twilio/lib/rest/video/v1/room/recording");
-
-const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
-
-
 //<<<<<<<<<<< session >>>>>>>>>>>>>>>>
 root.use(cookieParser())
 
-root.use(
-  session({
-    store: connectMongo.create({
-      mongoUrl: process.env.URL_MONGO,
-      mongoOptions: advancedOptions,
-    }),
-    secret: 'SECRETO',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      maxAge: 2000, //20 seg
-    },
-  })
-);  
-
 root.use(passport.initialize())
 root.use(passport.session())
+
+
 
 
 
@@ -80,7 +60,7 @@ passport.use(
   new LocalStrategy(async (username, password, done) => {
     console.log(username);
     const existe = await users.findUser(username, password)
-    console.log(existe);
+    
 
     if (!existe) {
       return done(null, false)
@@ -95,7 +75,7 @@ passport.use(
 
 passport.serializeUser((user, done) => {
   
-  console.log(user.id + 'serializado')
+  console.log(user.id + ' serializado')
 
   done(null, user.id)
 })
@@ -103,10 +83,11 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   
   const usuarioDzFinded = await users.findOne(id)
-
+  
 
   console.log(JSON.stringify(usuarioDzFinded) + ' desserializado')
   done(null, usuarioDzFinded)
+
 })
 
 //registrar
@@ -124,14 +105,16 @@ root.post("/register",passport.authenticate('register', {
 //login
 root.get("/login", (req, res) => {
   req.session.destroy()
-  console.log(req.session);
-  res.render("root");
+  const user = req.user
+  
+  res.render("root",{user});
 });
 
 root.post('/login', passport.authenticate('login', {
   
   successRedirect: '/api/admin',
   failureRedirect: '/login-error',
+  
 }))
 
 root.get('/login-error', (req, res) => {
@@ -142,6 +125,8 @@ root.get('/login-error', (req, res) => {
 //ADMIN
 
 root.get("/api/admin", isAuthenticated, (req, res) => {
+  
+
   res.render("admin")
   
 })
@@ -150,10 +135,24 @@ root.get("/api/admin", isAuthenticated, (req, res) => {
 
 root.get(`/api/profile/:user`,userAuth, async (req, res)=>{
 
+  
   const user = [await users.findOne(req.params.user)]
   
+  res.cookie('_id', `${req.params.user}`)
+  
+  req.app.locals.user = req.params.user
+
   res.render("profile", {user})
   
+}) 
+
+//LOGOUT
+
+root.get(`/logout`, (req, res) => {
+  console.log(req.session);
+  res.clearCookie(req.session)
+  req.session.destroy()
+  res.redirect(`/`)
 })
 
 module.exports = root;

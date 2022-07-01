@@ -8,7 +8,9 @@ const userSchema = new mongoose.Schema({
     email: { type: String, require: true, max: 30000},
     city: { type: String, required: true, max:200},
     password: { type: String, required: true, max: 30000},
-    zip:{ type: String, required: true, max: 30000}
+    zip:{ type: String, required: true, max: 30000},
+    cartId: { type: String, required: true, max: 30000},
+    avatar: { type: String, required: true, max:30000}
 })
 
 

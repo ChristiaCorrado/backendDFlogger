@@ -41,6 +41,9 @@ class ContenedorUsersMongoDB {
       console.log(newUser);
       await this.connectMongoose();
 
+      newUser.avatar =  'https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg'
+      newUser.cartId = `none`
+
       const userReg = new User()
       userReg.name = newUser.name
       userReg.lastName = newUser.lastName
@@ -49,7 +52,8 @@ class ContenedorUsersMongoDB {
       userReg.password = userReg.encryptPassword(newUser.password) 
       userReg.email = newUser.email
       userReg.zip = newUser.zip
-      
+      userReg.cartId = newUser.cartId
+      userReg.avatar = newUser.avatar
       return await userReg.save()
       
        
@@ -98,6 +102,18 @@ class ContenedorUsersMongoDB {
     }
   }
 
+  async addIdCart(idUser,idCarttoADD) {
+    try{
+      await this.connectMongoose()
+      console.log(idUser);
+      const result = await User.findOneAndUpdate(idUser, {cartId: idCarttoADD})
+      console.log(result);
+      
+      return await result.save();
+    }catch (error) {
+      console.log(`Error al guardar el id del cart en la BD ` + error.message);
+    }
+  }
   
 }
 

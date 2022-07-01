@@ -81,7 +81,7 @@ class ContenedorCartsF {
     const query = db.collection("carritos");
     const time = new Date().toLocaleString();
     const productToAdd = JSON.parse(JSON.stringify(await products.getProductById(idProd)))
-    
+    console.log(productToAdd);
     try {
       var docRef = await this.getCartById(idCart)
       const support = docRef.article

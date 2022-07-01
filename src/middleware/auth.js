@@ -9,6 +9,7 @@ helpers.isAuthenticated = (req, res, next) =>{
         return next()
     }else{
         console.log('entro en false');
+        
         res.redirect(`/api/profile/${req.session.passport?.user}`)
     }
 
@@ -16,6 +17,7 @@ helpers.isAuthenticated = (req, res, next) =>{
 
 helpers.userAuth = (req, res, next) =>{
     if(req.session.passport?.user){
+
         return next()
     }else{
         res.redirect(`/login`)

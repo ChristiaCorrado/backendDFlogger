@@ -31,11 +31,14 @@ if (MODO === 'CLUSTER' && cluster.isMaster) {
 }else{
 
   const express = require("express");
-
   const { urlencoded } = require("express")
   const router = require("./src/routes/routesIndex")
   const rootSession = require("./src/routes/root")
   const randomNumero = require("./src/routes/calculo")
+  
+  const session = require('express-session');
+  const connectMongo = require("connect-mongo");
+  const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
   const app = express();
   app.use(express.json());
@@ -43,13 +46,34 @@ if (MODO === 'CLUSTER' && cluster.isMaster) {
 
   app.set('port', process.env.PORT || 8080)
 
+  app.use(
+    session({
+      store: connectMongo.create({
+        mongoUrl: process.env.URL_MONGO,
+        mongoOptions: advancedOptions, 
+      }),
+      secret: 'SECRETO',
+      resave: true,
+      saveUninitialized: true,
+      cookie: {
+        maxAge: 24 * 60 * 60 * 1000, 
+      },
+    })
+  ); 
+  app.use((req,res,next) => {
+    app.locals.user = req.session.passport;
+    next()
+  })
   app.use(`/api`, router);
   app.use('/', rootSession)
-  app.use('/', randomNumero)
+  //app.use('/', randomNumero)
 
   
   app.set("view engine", "ejs");
   
+  
+
+
   app.use(express.static("./public"));
 
   app.listen(app.get('port'), () => {
