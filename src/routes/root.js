@@ -2,6 +2,8 @@
 const express = require("express");
 const root = express.Router();
 
+//EMAILSENDER
+const htmlTemplate = require("../Notificacion/gmail/email")
 
 
 const {isAuthenticated , userAuth} = require("../middleware/auth")
@@ -48,6 +50,11 @@ passport.use(
         return done(null, false)
       } else {
         const userOk = await users.saveNewUser(req.body)
+
+        const email = req.body.email
+        const mensaje = htmlTemplate.emailToNewUser(req.body.username, req.body.password)
+        htmlTemplate.sendGmail(email, mensaje)
+
         
         done(null, userOk )
       }
@@ -90,14 +97,24 @@ passport.deserializeUser(async (id, done) => {
 
 })
 
-//registrar
+//REGISTRAR
 
 root.get("/register",  (req, res)=>{
+
+  // AQUI ENVIAR EL EMAIL
   res.render("register")
 })
 
+root.get("/register-success", (req, res)=>{
+
+  res.render("register-success")
+
+})
+
+
+
 root.post("/register",passport.authenticate('register', {
-  successRedirect: '/login',
+  successRedirect: '/register-success',
   failureRedirect: '/login-error',
 }))
 

@@ -21,7 +21,7 @@ routerCarrito.post("/",async (req, res, next) => {
 
   if(noIdCart.cartId === 'none'){
     
-    const cart = await cartC.saveCart({});
+    const cart = await cartC.saveCart();
     userCart = await cartUser.addIdCart( {_id : userId.user},cart)
     
   } else {
@@ -43,7 +43,8 @@ routerCarrito.delete("/:id", async (req, res) => {
 
 routerCarrito.get("/:id/productos", async (req, res) => {
   const id = req.params.id;
-  const userCart = await cartC.getCartById(id);
+  const articulos = await cartC.getCartById(id);
+  const userCart = articulos.article
   console.log(userCart);
   res.render(`cart`,{userCart});
 });
