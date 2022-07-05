@@ -90,7 +90,7 @@ class ContenedorUsersMongoDB {
       await this.connectMongoose();
       const result = await User.findById(id);
 
-      if (result.length==0) {
+      if (result.length = 0) {
         return null
       }else{
 

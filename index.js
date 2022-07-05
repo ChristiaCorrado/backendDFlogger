@@ -60,8 +60,9 @@ if (MODO === 'CLUSTER' && cluster.isMaster) {
       },
     })
   ); 
+  
   app.use((req,res,next) => {
-    app.locals.user = req.session.passport;
+    app.locals.user = req.session.passport || null;
     next()
   })
   app.use(`/api`, router);
