@@ -3,173 +3,151 @@ const express = require("express");
 const root = express.Router();
 
 //EMAILSENDER
-const htmlTemplate = require("../Notificacion/gmail/email")
+const htmlTemplate = require("../Notificacion/gmail/email");
 
-
-const {isAuthenticated , userAuth} = require("../middleware/auth")
-const dotenv = require('dotenv')
+const { isAuthenticated, userAuth } = require("../middleware/auth");
+const dotenv = require("dotenv");
 
 //web tokens
-const PRIVATE_KEY = 'miClavePrivada'
+const PRIVATE_KEY = "miClavePrivada";
 
 //cookie + session + passport
 const cookieParser = require("cookie-parser");
 
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
 
 const userDao = require("../DAOs/users/usersDao");
-const users = new userDao;
+const users = new userDao();
 
-dotenv.config()
+dotenv.config();
 
 //<<<<<<<<<<< session >>>>>>>>>>>>>>>>
-root.use(cookieParser())
+root.use(cookieParser());
 
-root.use(passport.initialize())
-root.use(passport.session())
-
-
-
-
+root.use(passport.initialize());
+root.use(passport.session());
 
 //passport
 
 passport.use(
-  'register',
+  "register",
 
   new LocalStrategy(
     { passReqToCallback: true },
-     async (req, username, email, done) => {
-      
-      const existe = await users.findUser(username, email)
-      
+    async (req, username, email, done) => {
+      const existe = await users.findUser(username, email);
+
       console.log(existe);
       if (existe) {
-        return done(null, false)
+        return done(null, false);
       } else {
-        const userOk = await users.saveNewUser(req.body)
+        const userOk = await users.saveNewUser(req.body);
 
-        const email = req.body.email
-        const mensaje = htmlTemplate.emailToNewUser(req.body.username, req.body.password)
-        htmlTemplate.sendGmail(email, mensaje)
+        const email = req.body.email;
+        const mensaje = htmlTemplate.emailToNewUser(
+          req.body.username,
+          req.body.password
+        );
+        htmlTemplate.sendGmail(email, mensaje);
 
-        
-        done(null, userOk )
+        done(null, userOk);
       }
     }
   )
-)
+);
 
 passport.use(
-  'login',
+  "login",
   new LocalStrategy(async (username, password, done) => {
     console.log(username);
-    const existe = await users.findUser(username, password)
-    
+    const existe = await users.findUser(username, password);
 
     if (!existe) {
-      return done(null, false)
+      return done(null, false);
     } else {
-    
-      
-      return done(null, existe)
+      return done(null, existe);
     }
-    
   })
-)
+);
 
 passport.serializeUser((user, done) => {
-  
-  console.log(user.id + ' serializado')
+  console.log(user.id + " serializado");
 
-  done(null, user.id)
-})
+  done(null, user.id);
+});
 
 passport.deserializeUser(async (id, done) => {
-  
-  const usuarioDzFinded = await users.findOne(id)
-  
+  const usuarioDzFinded = await users.findOne(id);
 
-  console.log(JSON.stringify(usuarioDzFinded) + ' desserializado')
-  done(null, usuarioDzFinded)
-
-})
+  console.log(JSON.stringify(usuarioDzFinded) + " desserializado");
+  done(null, usuarioDzFinded);
+});
 
 //REGISTRAR
 
-root.get("/register",  (req, res)=>{
-
+root.get("/register", (req, res) => {
   // AQUI ENVIAR EL EMAIL
-  res.render("register")
-})
+  res.render("register");
+});
 
-root.get("/register-success", (req, res)=>{
+root.get("/register-success", (req, res) => {
+  res.render("register-success");
+});
 
-  res.render("register-success")
-
-})
-
-
-
-root.post("/register",passport.authenticate('register', {
-  successRedirect: '/register-success',
-  failureRedirect: '/login-error',
-}))
-
+root.post(
+  "/register",
+  passport.authenticate("register", {
+    successRedirect: "/register-success",
+    failureRedirect: "/login-error",
+  })
+);
 
 //login
 root.get("/login", (req, res) => {
-  req.session.destroy()
-  const user = req.user
-  
-  res.render("root",{user});
+  req.session.destroy();
+  const user = req.user;
+
+  res.render("root", { user });
 });
 
-root.post('/login', passport.authenticate('login', {
-  
-  successRedirect: '/api/admin',
-  failureRedirect: '/login-error',
-  
-}))
+root.post(
+  "/login",
+  passport.authenticate("login", {
+    successRedirect: "/api/admin",
+    failureRedirect: "/login-error",
+  })
+);
 
-root.get('/login-error', (req, res) => {
-  res.render("login-error")
-
-})
+root.get("/login-error", (req, res) => {
+  res.render("login-error");
+});
 
 //ADMIN
 
 root.get("/api/admin", isAuthenticated, (req, res) => {
-  
-
-  res.render("admin")
-  
-})
+  res.render("admin");
+});
 
 //PROFILE
 
-root.get(`/api/profile/:user`,userAuth, async (req, res)=>{
+root.get(`/api/profile/:user`, userAuth, async (req, res) => {
+  const user = [await users.findOne(req.params.user)];
 
-  
-  const user = [await users.findOne(req.params.user)]
-  
-  res.cookie('_id', `${req.params.user}`)
-  
-  req.app.locals.user = req.params.user
+  res.cookie("_id", `${req.params.user}`);
 
-  res.render("profile", {user})
-  
-}) 
+  req.app.locals.user = req.params.user;
+
+  res.render("profile", { user });
+});
 
 //LOGOUT
 
 root.get(`/logout`, (req, res) => {
   console.log(req.session);
-  res.clearCookie(req.session)
-  req.session.destroy()
-  res.redirect(`/`)
-})
+  res.clearCookie(req.session);
+  req.session.destroy();
+  res.redirect(`/`);
+});
 
 module.exports = root;

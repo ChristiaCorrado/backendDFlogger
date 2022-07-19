@@ -78,7 +78,10 @@ class ContenedorUsersMongoDB {
       if(!resultUser){
         return null
       }
-      return resultUser
+      if(test === true){
+
+        return resultUser
+      }
       
     } catch (error) {
       return console.log("Error al obtener el usuario finduser " + error.message);

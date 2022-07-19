@@ -55,26 +55,31 @@ routerCarrito.post("/:id/productos", async (req, res) => {
   const userId = req.session.passport
   console.log(userId);
   
+  if(userId === undefined){
+    res.redirect(`/nologed`)
+  }else{
 
-  const noIdCart = await cartUser.findOne(userId.user)
-
-  let userCart 
-
-  if(noIdCart.cartId === 'none'){
-    
-    const cart = await cartC.saveCart({});
-    userCart = await cartUser.addIdCart( {_id : userId.user},cart)
-    
-  } else {
-    userCart = noIdCart.cartId
-    console.log(userCart);
-    const cartActualizado = await cartC.addProductToCartById(userCart, {_id:idProducto});
-    console.log(cartActualizado);
-
+    const noIdCart = await cartUser.findOne(userId.user)
+  
+    let userCart 
+  
+    if(noIdCart.cartId === 'none'){
+      
+      const cart = await cartC.saveCart({});
+      userCart = await cartUser.addIdCart( {_id : userId.user},cart)
+      
+    } else {
+      userCart = noIdCart.cartId
+      console.log(userCart);
+      const cartActualizado = await cartC.addProductToCartById(userCart, {_id:idProducto});
+      console.log(cartActualizado);
+  
+    }
+  
+  
+    res.redirect(`/api/cart/${userCart}/productos`);
   }
 
-
-  res.redirect(`/api/cart/${userCart}/productos`);
 });
 
 routerCarrito.delete("/:id/productos/:productId", async (req, res) => {
