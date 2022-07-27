@@ -4,6 +4,7 @@
 const cluster = require('cluster')
 const os = require('os')
 const dotenv = require('dotenv')
+const { graphqlHTTP } = require('express-graphql')
 const MODO = process.argv[2] || 'FORK'
 
 dotenv.config()
@@ -35,7 +36,8 @@ if (MODO === 'CLUSTER' && cluster.isMaster) {
   const router = require("./src/routes/routesIndex")
   const rootSession = require("./src/routes/root")
   const randomNumero = require("./src/routes/calculo")
-  
+  const graphql = require("./src/routes/graphi")
+
   const session = require('express-session');
   const connectMongo = require("connect-mongo");
   const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
@@ -67,7 +69,7 @@ if (MODO === 'CLUSTER' && cluster.isMaster) {
   })
   app.use(`/api`, router);
   app.use('/', rootSession)
-  //app.use('/', randomNumero)
+  app.use('/', graphql)
 
   
   app.set("view engine", "ejs");

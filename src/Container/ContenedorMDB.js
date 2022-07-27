@@ -26,7 +26,7 @@ class ContenedorMongoDB {
     try {
       await this.connectMongoose();
 
-      let allArticles = await productSchema.find({});
+      let allArticles = await productSchema.find();
 
       return allArticles;
     } catch (error) {
