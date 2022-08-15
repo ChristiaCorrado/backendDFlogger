@@ -16,25 +16,16 @@ const transporter = nodeMailer.createTransport({
   },
 });
 
-const gmailOptions = (emailSubject, htmlTemplate) => {
+const gmailOptionsCompra = (emailSubject, htmlTemplate) => {
   return {
     from: process.env.GMAIL_ACCOUNT,
     to: emailSubject,
-    subject: "Nuevo Usuario Registrado ✅",
+    subject: "Su compra de NFT fue realizado con exito ✅",
     html: htmlTemplate,
   };
 };
 
- const emailToNewUser = (id, pass) => {
-  return `
-        <h2>¡Nuevo usuario Creado!</h2>
-        <p>Se ha registrado correctamente</p>
-        <ul>
-            <li><strong>USUARIO:</strong> ${id}</li>
-            <li><strong>CONTRASEÑA:</strong>${pass}</li>
-        </ul>
-        `;
-};
+ 
 
 const compraToBuyer = (cart)=>{ 
   let acumulador= ''
@@ -83,9 +74,9 @@ const compraToBuyer = (cart)=>{
 
 }
 
-async function sendGmail(subject, htmlTemplate) {
+async function sendGmailCompra(subject, htmlTemplate) {
   try {
-    const mailOptions = gmailOptions(subject, htmlTemplate);
+    const mailOptions = gmailOptionsCompra(subject, htmlTemplate);
 
     await transporter.sendMail(mailOptions);
     logger.logInfo(`Email sent`);
@@ -94,4 +85,4 @@ async function sendGmail(subject, htmlTemplate) {
   }
 }
 
-module.exports = {sendGmail,emailToNewUser, gmailOptions , compraToBuyer} 
+module.exports = {sendGmailCompra, gmailOptionsCompra , compraToBuyer} 

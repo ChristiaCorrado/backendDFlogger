@@ -7,7 +7,7 @@
   
               <div class="row">
   
-                <div class="col-lg-7">
+                <div id="cart" class="col-lg-7">
                   <h5 class="mb-3"><a href="/api/productos" class="text-body"><i
                         class="fas fa-long-arrow-alt-left me-2"></i>Continue shopping</a></h5>
                   <hr>
@@ -39,11 +39,16 @@
                         </div>
                         <div class="d-flex flex-row align-items-center">
                           <div style="width: 50px;">
-                            <h5 class="fw-normal mb-0">1</h5>
+                            <h5 id="quantity" class="fw-normal mb-0 ">1</h5>
                           </div>
                           <div style="width: 80px;">
-                            <h5 class="mb-0">$<%= userCart[article].price %></h5>
+                            <h5 id="price" class="mb-0" value="<%= userCart[article].price %>">$<%= userCart[article].price %></h5>
                           </div>
+                          
+                            <div style="width: 80px;">
+                              <button class="mb-0"  onclick="deleteCart(`<%=id%>`,`<%=userCart[article]._id%>`)">X</button>
+                            </div>
+                          
                           <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
                         </div>
                       </div>
@@ -109,27 +114,18 @@
   
                       <hr class="my-4">
   
-                      <div class="d-flex justify-content-between">
-                        <p class="mb-2">Subtotal</p>
-                        <p class="mb-2">$4798.00</p>
-                      </div>
+                      
+                     
   
-                      <div class="d-flex justify-content-between">
-                        <p class="mb-2">Shipping</p>
-                        <p class="mb-2">$20.00</p>
-                      </div>
-  
-                      <div class="d-flex justify-content-between mb-4">
-                        <p class="mb-2">Total(Incl. taxes)</p>
-                        <p class="mb-2">$4818.00</p>
-                      </div>
-  
-                      <button type="button" class="btn btn-info btn-block btn-lg">
-                        <div class="d-flex justify-content-between">
-                          <span>$4818.00</span>
-                          <span>Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
-                        </div>
-                      </button>
+                      <form action="buy" method="POSt">
+
+                        <button type="submit"  class="btn btn-info btn-block btn-lg">
+                          <div class="d-flex justify-content-between">
+                            <span id="totalBuy" >$00.00</span>
+                            <span>Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                          </div>
+                        </button>
+                      </form>
   
                     </div>
                   </div>

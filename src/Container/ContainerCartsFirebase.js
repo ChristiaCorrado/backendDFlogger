@@ -82,9 +82,14 @@ class ContenedorCartsF {
     const time = new Date().toLocaleString();
     const productToAdd = JSON.parse(JSON.stringify(await products.getProductById(idProd)))
     console.log(productToAdd);
+    let support = []
     try {
       var docRef = await this.getCartById(idCart)
-      const support = docRef.article
+
+      if(docRef.article.length > 0)
+
+      support = docRef.article
+
       if (support) {
         console.log(`entro en if`);
         const newCart = {
