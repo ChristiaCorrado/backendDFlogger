@@ -1,11 +1,12 @@
 
-//const nodemailer = require('./src/lib/nodemailer')
 
 const cluster = require('cluster')
 const os = require('os')
 const dotenv = require('dotenv')
 const { graphqlHTTP } = require('express-graphql')
 const MODO = process.argv[2] || 'FORK'
+const path = require('path')
+
 
 dotenv.config()
 
@@ -32,19 +33,32 @@ if (MODO === 'CLUSTER' && cluster.isMaster) {
 }else{
 
   const express = require("express");
+  const app = express();
   const { urlencoded } = require("express")
   const router = require("./src/routes/routesIndex")
   const rootSession = require("./src/routes/root")
-  const randomNumero = require("./src/routes/calculo")
+  
   const graphql = require("./src/routes/graphi")
 
   const session = require('express-session');
   const connectMongo = require("connect-mongo");
   const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
-  const app = express();
+
+
+
+
+  
+
+
+  
+
+  
   app.use(express.json());
   app.use(urlencoded({ extended: true }));
+
+
+
 
   app.set('port', process.env.PORT || 8080)
 
@@ -67,24 +81,22 @@ if (MODO === 'CLUSTER' && cluster.isMaster) {
     app.locals.user = req.session.passport || null;
     next()
   })
+
   app.use(`/api`, router);
   app.use('/', rootSession)
   app.use('/', graphql)
 
-  
   app.set("view engine", "ejs");
   
-  
+  app.use(express.static(path.join(__dirname,'public')));
 
-
-  app.use(express.static("./public"));
-
-  app.listen(app.get('port'), () => {
+  const server = app.listen(app.get('port'), () => {
     console.info(`'listening on port' ${app.get('port')},  'PID' ${process.pid}`)
   })
 
 
 }
+
 
 
 

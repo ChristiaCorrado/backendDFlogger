@@ -1,0 +1,46 @@
+[
+  {
+    "author": {
+      "id": "mail del usuario",
+      "nombre": "nombre del usuario",
+      "apellido": "apellido del usuario",
+      "edad": "edad del usuario",
+      "alias": "alias del usuario",
+      "avatar": "url avatar (foto, logo) del usuario"
+    },
+    "text": "mensaje del usuario"
+  },
+  {
+    "author": {
+      "id": "e@e",
+      "nombre": "e",
+      "apellido": "ee",
+      "edad": "e",
+      "alias": "e",
+      "avatar": "e"
+    },
+    "text": "e"
+  },
+  {
+    "author": {
+      "id": "r@e",
+      "nombre": "r",
+      "apellido": "r",
+      "edad": "r",
+      "alias": "r",
+      "avatar": "r"
+    },
+    "text": "r"
+  },
+  {
+    "author": {
+      "id": "j@j",
+      "nombre": "j",
+      "apellido": "j",
+      "edad": "j",
+      "alias": "j",
+      "avatar": "j"
+    },
+    "text": "j"
+  }
+]
