@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Shop Art NFT</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+    <script src="/js/scripts.js"></script>   
+</head>
+<body>
+    <h3 class="page-header modal-title  text-center"> Administrador de productos </h3>
+    <div class="container  d-flex justify-content-center align-items-center">
+
+        <form action="/api/Productos/addProduct" method="post" class="container-fluid">
+
+            <div class="col-md-4">
+                <label for="validationDefault01" class="form-label">Titulo</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="validationDefault01"
+                  name="title"
+                  placeholder="Pintura picasso"
+                  required
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="validationDefault02" class="form-label">Description</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="validationDefault02"
+                  name="description"
+                  placeholder="arte digital realizado por..."
+                  required
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="validationDefault02" class="form-label">Precio</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="validationDefault02"
+                  name="price"           
+                  placeholder="$$"    
+                  required
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="validationDefault02" class="form-label">Imagen</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="validationDefault02"
+                  name="thumbnail"   
+                  placeholder="coloque la ruta a su imagen en la nube"           
+                  required
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="validationDefault02" class="form-label">Stock</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="validationDefault02"
+                  name="stock"   
+                  placeholder="1"           
+                  required
+                />
+              </div>
+        
+              
+          
+            
+              <button class="btn btn-success" type="submit">CARGAR PRODUCTO</button>
+
+              <% if(message){ %>
+                <div class="alert alert-primary" role="alert">
+                    <p><%= message %></p>
+                  </div>
+                  <% } %>
+        
+            
+        </form>
+
+    </div>
+    
+</body>
+</html>

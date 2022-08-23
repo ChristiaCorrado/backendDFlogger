@@ -14,15 +14,17 @@ routerProductos.get("/", async (req, res) => {
   res.render('allProducts', allArticles)
 });
 
-routerProductos.post("/", async (req, res) => {
+routerProductos.post("/addProduct", async (req, res) => {
   console.log(`entro en enviarproducto a la bass`);
+  
   const newArticle = req.body
   console.log(req.body);
   await product.saveNewProduct(req.body)
+  req.flash(`mensaje`,`producto agregado`)
 
-  res.json(req.body)
+  res.redirect(`/api/admin/agregarProductos`)  
   
-  console.log(`Producto grabado correctamente`);
+  
 });
 
 routerProductos.put("/:id", async (req, res) => {

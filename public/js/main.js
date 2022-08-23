@@ -1,3 +1,37 @@
+const socket = io.connect();
+
+console.log(socket);
+
+function render(data) {
+    const html = data.map((elem, index) => {
+        return(`<div>
+            <strong style="color: blue">${elem.author.nombre}</strong>:
+            <em style="color: green">${elem.text}</em> </div>`)
+    }).join(" ");
+    document.getElementById('messages').innerHTML = html;
+}
+
+
+socket.on('messages', function(data) { console.log(data); render(data); });
+
+function addMessage(e) {
+    const mensaje = {
+        author:{ 
+            id: document.getElementById('username').value,
+            nombre : document.getElementById('nombre').value,
+            apellido: document.getElementById('apellido').value,
+            edad: document.getElementById('edad').value,
+            alias: document.getElementById('alias').value,
+            avatar: document.getElementById('avatar').value
+        },
+        text: document.getElementById('texto').value
+    };
+    console.log(mensaje);
+    
+    socket.emit('new-message', mensaje);
+    return false;
+}
+
 const deleteCart = async (idCart,id_product) => {
     try {
         await fetch(`/api/cart/${idCart}/productos/${id_product}`,
@@ -61,36 +95,3 @@ function myProfile() {
 }
 
 
-
-const socket = io("http://localhost:3000/socket.io/socket.io.js");
-
-
-function render(data) {
-    const html = data.map((elem, index) => {
-        return(`<div>
-            <strong style="color: blue">${elem.author.nombre}</strong>:
-            <em style="color: green">${elem.text}</em> </div>`)
-    }).join(" ");
-    document.getElementById('messages').innerHTML = html;
-}
-
-
-socket.on('messages', function(data) { console.log(data); render(data); });
-
-function addMessage(e) {
-    const mensaje = {
-        author:{ 
-            id: document.getElementById('username').value,
-            nombre : document.getElementById('nombre').value,
-            apellido: document.getElementById('apellido').value,
-            edad: document.getElementById('edad').value,
-            alias: document.getElementById('alias').value,
-            avatar: document.getElementById('avatar').value
-        },
-        text: document.getElementById('texto').value
-    };
-    console.log(mensaje);
-    
-    socket.emit('new-message', mensaje);
-    return false;
-}

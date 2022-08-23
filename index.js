@@ -39,18 +39,17 @@ if (MODO === 'CLUSTER' && cluster.isMaster) {
   const rootSession = require("./src/routes/root")
   
   const graphql = require("./src/routes/graphi")
-
+  const flash = require('connect-flash')
   const session = require('express-session');
   const connectMongo = require("connect-mongo");
   const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
-
-
-
-
+  const { Server: HttpServer } = require('http')
+  const { Server: IOServer } = require('socket.io')
   
+  const httpServer = new HttpServer(app)
 
-
+  const io = new IOServer(httpServer)
   
 
   
@@ -72,10 +71,12 @@ if (MODO === 'CLUSTER' && cluster.isMaster) {
       resave: true,
       saveUninitialized: true,
       cookie: {
-        maxAge: 24 * 60 * 60 * 1000, 
+        maxAge: 24 * 60  * 1000, 
       },
     })
   ); 
+  
+  app.use(flash());
   
   app.use((req,res,next) => {
     app.locals.user = req.session.passport || null;
@@ -85,15 +86,48 @@ if (MODO === 'CLUSTER' && cluster.isMaster) {
   app.use(`/api`, router);
   app.use('/', rootSession)
   app.use('/', graphql)
+  
 
   app.set("view engine", "ejs");
   
   app.use(express.static(path.join(__dirname,'public')));
 
-  const server = app.listen(app.get('port'), () => {
+  httpServer.listen(app.get('port'), () => {
     console.info(`'listening on port' ${app.get('port')},  'PID' ${process.pid}`)
   })
 
+
+  const chatSocket = require("./src/Container/chat")
+  const chat = new chatSocket
+
+  const dataM = []
+
+    const messages = chat.readMessages()
+    .then(data => {
+        
+        dataM.push(...data)
+        
+    });
+
+  io.on("connection", (socket) => {
+    console.log("SE CONECTO UN USUARIO");
+     console.log(dataM);
+     socket.emit("messages", dataM);
+
+     socket.on("mensaje", (data) => {
+     mensajes.push(data);
+     console.log(mensajes);
+     io.sockets.emit(mensajes);
+     });
+
+     socket.on("new-message", (data) => {
+     console.log(data);
+     chat.saveMessages(data)
+     io.sockets.emit("messages", messages);
+    });
+
+
+});
 
 }
 
