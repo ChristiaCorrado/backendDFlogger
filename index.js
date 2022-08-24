@@ -14,8 +14,6 @@ if (MODO === 'CLUSTER' && cluster.isMaster) {
 
   const numCPUs = os.cpus().length
 
-  console.log(`procesadores disponibles  ${numCPUs}`);
-  console.log(`PID MASTER ${process.pid}`);
 
   for(let i = 0; i < numCPUs; i++) {
     cluster.fork()
@@ -23,12 +21,7 @@ if (MODO === 'CLUSTER' && cluster.isMaster) {
   }
 
   cluster.on('exit',(worker) =>{
-    console.log(
-      'Worker ',
-      worker.process.pid,
-      'died ',
-      new Date().toLocaleString()
-    );
+    
   })
 }else{
 
@@ -110,18 +103,18 @@ if (MODO === 'CLUSTER' && cluster.isMaster) {
     });
 
   io.on("connection", (socket) => {
-    console.log("SE CONECTO UN USUARIO");
-     console.log(dataM);
+    
+     
      socket.emit("messages", dataM);
 
      socket.on("mensaje", (data) => {
      mensajes.push(data);
-     console.log(mensajes);
+    
      io.sockets.emit(mensajes);
      });
 
      socket.on("new-message", (data) => {
-     console.log(data);
+     
      chat.saveMessages(data)
      io.sockets.emit("messages", messages);
     });

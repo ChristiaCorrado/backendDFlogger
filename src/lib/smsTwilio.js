@@ -14,9 +14,9 @@ const  smsTwilio = async () =>{
         from: '+16067220337',
         to: '+543584861275'
     })
-    console.log(message)
+
     } catch (error) {
-    console.log(error)
+
     }
 
    

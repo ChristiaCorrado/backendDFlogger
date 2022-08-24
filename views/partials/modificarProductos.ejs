@@ -2,15 +2,17 @@
 
 
 <div class="jumbotron d-flex row">
-    <h1 style="color: blue">Ingrese Productos</h1>
-    <br />
+    
     
     <%  for (const product in allArticles ) { %>
 
-    <form action="/api/productos/<%= allArticles[product]._id %>" method="post" class="col-md-3 control">
+    <form id="<%= allArticles[product]._id %>" class="col-md-3 control" onsubmit="event.preventDefault();">
         <div class="form-group">
+
         <label for="title"><b><%= allArticles[product].title %></b></label>
-        <input id="title" class="form-control" type="text" name="title" />
+        <div>
+            <img src="<%= allArticles[product].thumbnail %>" alt="" class="w-100">
+        </div>
         </div>
 
         <div class="form-group">
@@ -20,11 +22,39 @@
             class="form-control"
             type="number"
             name="price"
+            placeholder="Nuevo precio"
         />
         </div>
 
+        <div class="d-flex justify-content-between">
+            <button class="btn btn-success mt-3 mb-5" onclick="updateProduct('<%= allArticles[product]._id %>')">Actualizar</button>
 
-        <button class="btn btn-success mt-3 mb-5">Enviar</button>
+            <button type="button" class="btn btn-danger mt-3 mb-5" data-bs-toggle="modal" data-bs-target="#id<%= allArticles[product]._id %>">
+                Eliminar
+            </button>
+        </div>
+        <!-- Button trigger modal -->
+            
+            
+            <!-- Modal -->
+            <div class="modal fade" id="id<%= allArticles[product]._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">⚠️ATENCION⚠️</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    Esta a punto de eliminar el producto <%= allArticles[product].title %>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="deleteProduct('<%= allArticles[product]._id %>')">Save changes</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        
     </form>
     <% } %>
 

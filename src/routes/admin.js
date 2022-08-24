@@ -7,7 +7,7 @@ const product = new productoDao
 
 
 admin.post( 'logout', (req, res)=>{
-  console.log(req.session);
+
   res.redirect('/login');
 
   

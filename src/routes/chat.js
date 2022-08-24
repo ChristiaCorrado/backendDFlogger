@@ -22,27 +22,6 @@ routerChat.get('/:email', userAuth, (req, res) => {
     
 
 
-    // io.on("connection", (socket) => {
-    //     console.log("SE CONECTO UN USUARIO");
-    //     console.log(dataM);
-    //     socket.emit("messages", dataM);
-
-    //     socket.on("mensaje", (data) => {
-    //     mensajes.push(data);
-    //     console.log(mensajes);
-    //     io.sockets.emit(mensajes);
-    //     });
-
-    //     socket.on("new-message", (data) => {
-    //     console.log(data);
-    //     chat.saveMessages(data)
-    //     io.sockets.emit("messages", messages);
-    //     });
-
-
-    // });
-
-
     res.render('supportChannel')
 
 })

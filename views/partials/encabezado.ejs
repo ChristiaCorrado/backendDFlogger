@@ -15,6 +15,9 @@
     
     <script src="/js/scripts.js"></script>   
 
+    <script src="https://kit.fontawesome.com/280953156e.js" crossorigin="anonymous"></script>
+
+
 </head>
 <body>
     
@@ -49,12 +52,22 @@
                         <span id="spanCart" class="badge bg-dark text-white ms-1 rounded-pill"></span>
                     </a>
                 </form>
-                <div class="d-flex align-items-center justify-content-center ">
+
+                <% if (admin == `false`) {%>
+                    <div class="d-flex align-items-center justify-content-center ">
+                    
+                        <a href="/logout" class="btn btn-danger mx-2">Logout</a>
+                        <a  onclick="myProfile()" class="btn btn-light mx-2">Mi Cuenta</a>
+                    
+                    </div>
+                    <%} else{ %>
+                        <div class="d-flex align-items-center justify-content-center ">
                 
-                    <a href="/logout" class="btn btn-danger mx-2">Logout</a>
-                    <a  onclick="myProfile()" class="btn btn-light mx-2">Mi Cuenta</a>
-                   
-                </div>
+                            <a href="/logout" class="btn btn-danger mx-2">Logout</a>
+                            <a  href="/api/admin" class="btn btn-light mx-2">Administrador</a>
+                           
+                        </div>
+                <% } %> 
              <% } %> 
         </div>
     </div>

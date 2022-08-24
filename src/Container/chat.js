@@ -12,7 +12,7 @@ class ChatSocket {
   
         return mensajes;
       } catch (err) {
-        console.log(err.message);
+        
       }
     }
   
@@ -20,15 +20,15 @@ class ChatSocket {
       try {
         const chat = await this.readMessages();
         const newChat = [...chat, mensaje];
-        console.log(newChat);
+        
         await fs.promises.writeFile('./dataBase/chat.txt',JSON.stringify(newChat ,null,2))
       } catch (err) {
-        console.log(err.message);
+     
       }
     }
 
     baseJson = (data) => {
-      console.log(data);
+      
       const allMensajes = data.map((chat) => {
         return allMensajes;
       })}

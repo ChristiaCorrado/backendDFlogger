@@ -15,7 +15,7 @@ const routerCarrito = express.Router();
 routerCarrito.post("/",async (req, res, next) => {
 
   const userId = req.session.passport
-  console.log(userId);
+
  
   const noIdCart = await cartUser.findOne(userId.user)
 
@@ -51,7 +51,7 @@ routerCarrito.get("/:id/productos", async (req, res) => {
   const id = req.params.id;
   const articulos = await cartC.getCartById(id);
   const userCart = articulos.article
-  console.log(userCart);
+
   res.render(`cart`,{userCart,id});
 });
 
@@ -59,7 +59,7 @@ routerCarrito.post("/:id/productos", async (req, res) => {
   const idProducto = req.params.id;
 
   const userId = req.session.passport
-  console.log(userId);
+
   
   if(userId === undefined){
     res.redirect(`/nologed`)
@@ -76,9 +76,9 @@ routerCarrito.post("/:id/productos", async (req, res) => {
       
     } else {
       userCart = noIdCart.cartId
-      console.log(userCart);
+
       const cartActualizado = await cartC.addProductToCartById(userCart, {_id:idProducto});
-      console.log(cartActualizado);
+
   
     }
   
@@ -92,8 +92,7 @@ routerCarrito.delete("/:id/productos/:productId", async (req, res) => {
   const id = req.params.id;
   const productId = req.params.productId;
  
-  console.log(id);
-  console.log(productId);
+
   const cart = await cartC.deleteProductCartById(id, productId);
   res.redirect(`/api/cart/${id}/productos`);
 })
@@ -101,7 +100,7 @@ routerCarrito.delete("/:id/productos/:productId", async (req, res) => {
 routerCarrito.get("/", async (req, res) => {
   
   const userId = req.session.passport
-  console.log(userId);
+
   
   if(userId === undefined){
     res.redirect(`/nologed`)
@@ -134,7 +133,7 @@ routerCarrito.post("/:id/buy",async (req, res) => {
 
   `
 
-  console.log(mensaje);
+
   htmlTemplate.sendGmailCompra(email, mensaje);
 
   res.redirect(`/`)

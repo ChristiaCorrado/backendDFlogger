@@ -26,10 +26,10 @@ class ContenedorCartsF {
       if (item) {
         return item;
       } else {
-        return console.log("Carrito no encontrado");
+        
       }
     } catch (error) {
-      return console.log("Error al obtener el Carrito", error.message);
+      
     }
   }
 
@@ -50,7 +50,7 @@ class ContenedorCartsF {
         .catch((error) => console.error("Error adding document: ", error));
       return newCart;
     } catch (error) {
-      return console.log(error);
+    
     }
   }
 
@@ -58,21 +58,21 @@ class ContenedorCartsF {
     const db = admin.firestore();
     const query = db.collection("carritos");
     try {
-      console.log(id);
+      
       let idTodelete = id.toString();
-      console.log(idTodelete);
+   
       const doc = query
         .doc(`${idTodelete}`)
         .delete()
         .then((e) => {
-          console.log("Document successfully deleted!");
+          
         })
         .catch((error) => {
-          console.error("Error removing document: ", error);
+          
         });
-      console.log("se borro el carrito");
+   
     } catch (error) {
-      return console.log("Error al eliminar el Carrito", error.message);
+      
     }
   }
 
@@ -81,7 +81,7 @@ class ContenedorCartsF {
     const query = db.collection("carritos");
     const time = new Date().toLocaleString();
     const productToAdd = JSON.parse(JSON.stringify(await products.getProductById(idProd)))
-    console.log(productToAdd);
+
     let support = []
     try {
       var docRef = await this.getCartById(idCart)
@@ -91,32 +91,29 @@ class ContenedorCartsF {
       support = docRef.article
 
       if (support) {
-        console.log(`entro en if`);
+      
         const newCart = {
           article: [...support, productToAdd ],
           timestamp:time
         } 
         
         
-        console.log(idCart);
+   
         const updated = await query.doc(idCart).set(newCart)
         
       }else{
-        console.log(`entro en else`);
+       
         
         const nCart = {
           article: [ productToAdd ],
           timestamp:time
         } 
-        console.log(nCart);
+
         const updated = await query.doc(idCart).set(nCart)
         
       }
     } catch (error) {
-      return console.log(
-        "Error al agregar el producto al carrito", 
-        error.message
-      );
+     
     }
   }
 
@@ -129,10 +126,9 @@ class ContenedorCartsF {
 
       var docRef = await this.getCartById(idCart)
       const support = docRef.article
-      console.log(support);
+
       const deleteProd = support.filter((p) => p._id != idProduct);
       
-      console.log(deleteProd);
 
 
       const newCart = {
@@ -143,12 +139,10 @@ class ContenedorCartsF {
       
       
       const updated = await query.doc(idCart).set(newCart)
-      console.log(updated);
+
     } catch (error) {
-      return console.log(
-        "Error al eliminar porducto del carrito" + 
-        error.message
-      );
+
+
     }
     
   }
@@ -163,10 +157,10 @@ class ContenedorCartsF {
       if (finded) {
         return finded.data();
       } else {
-        return console.log("Carrito no encontrado");
+
       }
     } catch (error) {
-      return console.log("Error al obtener el Carrito", null);
+
     }
   }
 }

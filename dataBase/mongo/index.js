@@ -8,9 +8,9 @@ const CRUDmongoose = () =>{
             useNewUrlParser: true,
             useUnifiedTopology:true
         })
-        console.log( `base mongo conectada`);
+    
     }catch { err =>{
-        console.log(err.message);
+        
     }
         
     }

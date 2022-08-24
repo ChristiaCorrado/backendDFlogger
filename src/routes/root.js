@@ -38,7 +38,7 @@ passport.use(
     async (req, username, email, done) => {
       const existe = await users.findUser(username, email);
 
-      console.log(existe);
+
       if (existe) {
         return done(null, false);
       } else {
@@ -60,7 +60,7 @@ passport.use(
 passport.use(
   "login",
   new LocalStrategy(async (username, password, done) => {
-    console.log(username);
+
     const existe = await users.findUser(username, password);
 
     if (!existe) {
@@ -72,7 +72,7 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-  console.log(user.id + " serializado");
+
 
   done(null, user.id);
 });
@@ -80,7 +80,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   const usuarioDzFinded = await users.findOne(id);
 
-  console.log(JSON.stringify(usuarioDzFinded) + " desserializado");
+
   done(null, usuarioDzFinded);
 });
 
@@ -126,6 +126,7 @@ root.get("/login-error", (req, res) => {
 //ADMIN
 
 root.get("/api/admin", isAuthenticated, (req, res) => {
+  req.app.locals.admin = `true`
   res.render("admin");
 });
 
@@ -133,6 +134,7 @@ root.get("/api/admin", isAuthenticated, (req, res) => {
 
 root.get(`/api/profile/:user`, userAuth, async (req, res) => {
   const user = [await users.findOne(req.params.user)];
+  req.app.locals.admin = `false`
 
   res.cookie("_id", `${req.params.user}`);
 
@@ -144,7 +146,7 @@ root.get(`/api/profile/:user`, userAuth, async (req, res) => {
 //LOGOUT
 
 root.get(`/logout`, (req, res) => {
-  console.log(req.session);
+
   res.clearCookie(req.session);
   req.session.destroy();
   res.redirect(`/`);

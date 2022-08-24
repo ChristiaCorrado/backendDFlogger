@@ -1,36 +1,4 @@
-const socket = io.connect();
 
-console.log(socket);
-
-function render(data) {
-    const html = data.map((elem, index) => {
-        return(`<div>
-            <strong style="color: blue">${elem.author.nombre}</strong>:
-            <em style="color: green">${elem.text}</em> </div>`)
-    }).join(" ");
-    document.getElementById('messages').innerHTML = html;
-}
-
-
-socket.on('messages', function(data) { console.log(data); render(data); });
-
-function addMessage(e) {
-    const mensaje = {
-        author:{ 
-            id: document.getElementById('username').value,
-            nombre : document.getElementById('nombre').value,
-            apellido: document.getElementById('apellido').value,
-            edad: document.getElementById('edad').value,
-            alias: document.getElementById('alias').value,
-            avatar: document.getElementById('avatar').value
-        },
-        text: document.getElementById('texto').value
-    };
-    console.log(mensaje);
-    
-    socket.emit('new-message', mensaje);
-    return false;
-}
 
 const deleteCart = async (idCart,id_product) => {
     try {
@@ -40,10 +8,55 @@ const deleteCart = async (idCart,id_product) => {
         window.location.reload()
     }
     catch (err) {
-        console.log(err);
+        
     }
 }
 
+
+ const updateProduct = async (idProduct) =>{
+    const id = idProduct
+    const fmU = document.getElementById(`${idProduct}`)
+    
+  
+    
+        const data = {}
+        new FormData(fmU).forEach((value, key) => data[key] = value)
+ 
+        try{
+            await fetch(`/api/productos/${id}`,{
+                method: 'PUT',
+                body: JSON.stringify(data),
+                headers: {"Content-type":"application/json;charset=utf-8"},
+            })
+
+            
+            
+        }
+        catch (err) {
+          
+        }
+        
+        window.location.reload()
+}
+
+const deleteProduct = async (idProduct) =>{
+    const id = idProduct
+
+        try{
+            await fetch(`/api/productos/${id}`,{
+                method: 'DELETE',
+                
+            })
+
+            
+            
+        }
+        catch (err) {
+            
+        }
+        
+        window.location.reload()
+}
 
 
 const suma = () =>{
@@ -70,7 +83,7 @@ const suma = () =>{
 const articlesInCart = () =>{
     const quantityCollector = document.querySelectorAll("#quantity")
 
-    console.log(quantityCollector);
+    
     let spanCart = document.getElementById('spanCart')
     let quantity = 0
 
@@ -89,9 +102,40 @@ articlesInCart()
 
 function myProfile() {
     
-    console.log(document.cookie.replace(/_id=/,``));
+
 
     window.location.href =`/api/profile/${document.cookie.replace(/_id=/,``)}`
 }
 
+const socket = io.connect();
 
+
+function render(data) {
+    const html = data.map((elem, index) => {
+        return(`<div>
+            <strong style="color: blue">${elem.author.nombre}</strong>:
+            <em style="color: green">${elem.text}</em> </div>`)
+    }).join(" ");
+    document.getElementById('messages').innerHTML = html;
+}
+
+
+socket.on('messages', function(data) {  render(data); });
+
+function addMessage(e) {
+    const mensaje = {
+        author:{ 
+            id: document.getElementById('username').value,
+            nombre : document.getElementById('nombre').value,
+            apellido: document.getElementById('apellido').value,
+            edad: document.getElementById('edad').value,
+            alias: document.getElementById('alias').value,
+            avatar: document.getElementById('avatar').value
+        },
+        text: document.getElementById('texto').value
+    };
+
+    
+    socket.emit('new-message', mensaje);
+    return false;
+}
