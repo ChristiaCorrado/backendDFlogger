@@ -79,9 +79,9 @@ async function sendGmailCompra(subject, htmlTemplate) {
     const mailOptions = gmailOptionsCompra(subject, htmlTemplate);
 
     await transporter.sendMail(mailOptions);
-    logger.logInfo(`Email sent`);
+    
   } catch (error) {
-    logger.logwn(error);
+   
   }
 }
 

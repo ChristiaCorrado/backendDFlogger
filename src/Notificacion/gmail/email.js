@@ -88,9 +88,9 @@ async function sendGmail(subject, htmlTemplate) {
     const mailOptions = gmailOptions(subject, htmlTemplate);
 
     await transporter.sendMail(mailOptions);
-    logger.logInfo(`Email sent`);
+
   } catch (error) {
-    logger.logwn(error);
+
   }
 }
 

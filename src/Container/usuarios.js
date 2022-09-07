@@ -112,6 +112,7 @@ class ContenedorUsersMongoDB {
 
       
       return await result.save();
+      
     }catch (error) {
    
     }

@@ -5,12 +5,17 @@ const deleteCart = async (idCart,id_product) => {
         await fetch(`/api/cart/${idCart}/productos/${id_product}`,
         { method:"DELETE" })
         
+        let cantidad = localStorage.getItem("cartTotal")
+
+        console.log(cantidad);
+
         window.location.reload()
     }
     catch (err) {
         
     }
 }
+
 
 
  const updateProduct = async (idProduct) =>{
@@ -47,7 +52,6 @@ const deleteProduct = async (idProduct) =>{
                 method: 'DELETE',
                 
             })
-
             
             
         }
@@ -59,7 +63,7 @@ const deleteProduct = async (idProduct) =>{
 }
 
 
-const suma = () =>{
+const totalBuy = () =>{
 
     const price = document.querySelectorAll("#price")
 
@@ -80,6 +84,11 @@ const suma = () =>{
     
 }
 
+
+totalBuy()
+
+
+
 const articlesInCart = () =>{
     const quantityCollector = document.querySelectorAll("#quantity")
 
@@ -90,6 +99,8 @@ const articlesInCart = () =>{
     quantityCollector.forEach(function(innerText) {
             
         quantity += parseFloat(innerText.innerHTML);
+
+        
         
     })
     
@@ -97,8 +108,8 @@ const articlesInCart = () =>{
 
 }
 
-suma()
-articlesInCart()
+
+
 
 function myProfile() {
     
@@ -138,4 +149,9 @@ function addMessage(e) {
     
     socket.emit('new-message', mensaje);
     return false;
+
+
+
 }
+
+

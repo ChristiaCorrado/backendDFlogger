@@ -19,12 +19,12 @@
 
     <% if(user) { %>
     <form action="/api/cart/<%= producto[article]._id %>/productos" method="post" class="w-100">
-      <button class="btn btn-danger w-100" value="<%= producto[article]._id %>">Add to cart</button>
+      <button class="btn btn-danger w-100" value="<%= producto[article]._id %>" onclick="unidadesTotal()">Add to cart</button>
 
     </form>
     <% } else{ %>
       <!-- Button trigger modal -->
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" >
         ADD TO CART
       </button>
       <% };%>

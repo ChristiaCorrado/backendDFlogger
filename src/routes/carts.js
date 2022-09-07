@@ -12,7 +12,7 @@ const htmlTemplate = require("../Notificacion/gmail/compraNotificacion");
 const express = require("express");
 const routerCarrito = express.Router();
 
-routerCarrito.post("/",async (req, res, next) => {
+routerCarrito.get("/",async (req, res, next) => {
 
   const userId = req.session.passport
 
@@ -23,20 +23,20 @@ routerCarrito.post("/",async (req, res, next) => {
 
   if(noIdCart.cartId === 'none'){
     
-    const cart = await cartC.saveCart({});
+    const cartId = await cartC.saveCart({});
 
-    userCart = await cartUser.addIdCart( {_id : userId.user},cart)
+    const newData = await cartUser.addIdCart( {_id : userId.user},cartId)
+
     
+    userCart = cartId
+
   } else {
     userCart = noIdCart.cartId
     
   }
 
-    setTimeout(() => {
-      
-    }, 500);
 
-    res.redirect(`cart/${userCart}/productos`);
+  res.redirect(`cart/${userCart}/productos`);
 
 
 });
@@ -81,6 +81,8 @@ routerCarrito.post("/:id/productos", async (req, res) => {
 
   
     }
+    
+
   
   
     res.redirect(`/api/cart/${userCart}/productos`);
@@ -94,30 +96,16 @@ routerCarrito.delete("/:id/productos/:productId", async (req, res) => {
  
 
   const cart = await cartC.deleteProductCartById(id, productId);
+
+
   res.redirect(`/api/cart/${id}/productos`);
 })
 
-routerCarrito.get("/", async (req, res) => {
-  
-  const userId = req.session.passport
-
-  
-  if(userId === undefined){
-    res.redirect(`/nologed`)
-  }else{
-
-    const noIdCart = await cartUser.findOne(userId.user)
-  
-    let userCart = noIdCart.cartId
-  
-  
-  
-    res.redirect(`/api/cart/${userCart}/productos`);
-}});
 
 routerCarrito.post("/:id/buy",async (req, res) => {
-  const id = req.params.id;
-  const articulos = await cartC.getCartById(id);
+  const idCart = req.params.id;
+
+  const articulos = await cartC.getCartById(idCart);
   const userCart = articulos.article
 
   const userId = req.session.passport
@@ -133,11 +121,11 @@ routerCarrito.post("/:id/buy",async (req, res) => {
 
   `
 
-
   htmlTemplate.sendGmailCompra(email, mensaje);
 
-  res.redirect(`/`)
+  const clear = await cartC.clearCart(idCart)
 
+  res.redirect(`/api/cart`)
 });
 
 

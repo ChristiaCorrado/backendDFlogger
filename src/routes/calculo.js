@@ -6,10 +6,6 @@ const logger = require("../lib/utils")
 
 
 
-logger.logjsConfig(process.env.ENT)
-
-const logWarning = log4js.getLogger("logwn");
-const logInfo = log4js.getLogger("logInfo");
 
 //os
 const os = require("os");

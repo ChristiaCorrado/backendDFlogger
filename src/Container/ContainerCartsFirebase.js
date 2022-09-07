@@ -163,6 +163,29 @@ class ContenedorCartsF {
 
     }
   }
+
+  async clearCart(idCart) {
+
+
+    const time = new Date().toLocaleString();
+
+    try {
+      const db = admin.firestore();
+      const query = db.collection("carritos");
+      
+      const newCart = {
+        article: {},
+        timestamp:time
+      }
+
+      const updated = await query.doc(String(idCart)).set(newCart)
+      
+
+    } catch (error) {
+
+    }
+  }
+
 }
 
 module.exports = ContenedorCartsF;

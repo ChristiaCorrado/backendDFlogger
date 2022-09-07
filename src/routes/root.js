@@ -128,17 +128,21 @@ root.get("/login-error", (req, res) => {
 root.get("/api/admin", isAuthenticated, (req, res) => {
   req.app.locals.admin = `true`
   res.render("admin");
+
 });
 
 //PROFILE
 
 root.get(`/api/profile/:user`, userAuth, async (req, res) => {
-  const user = [await users.findOne(req.params.user)];
   req.app.locals.admin = `false`
+  const user = [await users.findOne(req.params.user)];
+
 
   res.cookie("_id", `${req.params.user}`);
 
+
   req.app.locals.user = req.params.user;
+  
 
   res.render("profile", { user });
 });

@@ -44,12 +44,9 @@
                           <div style="width: 80px;">
                             <h5 id="price" class="mb-0" value="<%= userCart[article].price %>">$<%= userCart[article].price %></h5>
                           </div>
+                         
                           
-                            <div style="width: 80px;">
-                              <button class="mb-0"  onclick="deleteCart(`<%=id%>`,`<%=userCart[article]._id%>`)">X</button>
-                            </div>
-                          
-                          <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                          <a href="#!" style="color: #cecece;" onclick="deleteCart(`<%=id%>`,`<%=userCart[article]._id%>`)" ><i class="fas fa-trash-alt"></i></a>
                         </div>
                       </div>
                     </div>
