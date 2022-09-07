@@ -125,7 +125,7 @@ routerCarrito.post("/:id/buy",async (req, res) => {
 
   const clear = await cartC.clearCart(idCart)
 
-  res.redirect(`/api/cart`)
+  res.render(`compraExitosa`)
 });
 
 
